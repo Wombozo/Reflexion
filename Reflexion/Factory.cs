@@ -17,6 +17,7 @@ namespace Reflexion
                 propertyInfo.SetValue(instance, props[i]);
                 i++;
             }
+
             return instance;
         }
     }
