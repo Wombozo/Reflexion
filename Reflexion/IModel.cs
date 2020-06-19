@@ -2,12 +2,8 @@ using System.Collections.Generic;
 
 namespace Reflexion
 {
-    public interface IModel
-    {
-        IEnumerable<string> GetPropertiesName();
-    }
-
-    public class Book : IModel
+    [ModelObject("It's a book")]
+    public class Book
     {
         public int NbPages { get; set; }
 
@@ -18,7 +14,8 @@ namespace Reflexion
         public IEnumerable<string> GetPropertiesName() => new[] {nameof(NbPages)};
     }
 
-    public class Person : IModel
+    [ModelObject("It's a Person")]
+    public class Person
     {
         public string Name { get; set; }
         public Book Book { get; set; }

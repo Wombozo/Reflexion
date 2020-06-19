@@ -1,16 +1,21 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Reflexion
 {
     public static class Factory
     {
-        public static IModel Create(string className, object[] props)
+        public static object Create(string className, object[] props)
         {
-            var type = Type.GetType(nameof(Reflexion) + "." + className, true);
-            var instance = (IModel) Activator.CreateInstance(type);
-            var propertiesName = instance?.GetPropertiesName();
-            var propertiesInfo = (propertiesName ?? throw new InvalidOperationException()).Select(type.GetProperty);
+            var assembly = Assembly.GetExecutingAssembly();
+            var types = assembly.GetTypes();
+            Type type;
+            type = types.First(t => t.Name == className);
+            var instance = Activator.CreateInstance(type);
+            var propertiesName = GetPropertiesFromInstance(instance);
+            var propertiesInfo = propertiesName.Select(type.GetProperty);
             var i = 0;
             foreach (var propertyInfo in propertiesInfo)
             {
@@ -19,6 +24,16 @@ namespace Reflexion
             }
 
             return instance;
+        }
+
+        public static IEnumerable<string> GetPropertiesFromInstance(object instance)
+        {
+            return instance switch
+            {
+                Book instanceBook => instanceBook.GetPropertiesName(),
+                Person instancePerson => instancePerson.GetPropertiesName(),
+                _ => throw new NotSupportedException()
+            };
         }
     }
 }
