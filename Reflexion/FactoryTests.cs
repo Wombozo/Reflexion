@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.Design;
 using NFluent;
 using NUnit.Framework;
@@ -30,6 +31,16 @@ namespace Reflexion
             Check.That(sut).IsInstanceOf<Person>();
             Check.That(((Person) sut).Name).Equals(name);
             Check.That(((Person) sut).Book.NbPages).Equals(nbPages);
+        }
+
+        [Test]
+        public void should_only_create_from_assembly_ModelObject()
+        {
+            Check.ThatCode(() => Factory.Create("Dummy", new object[0])).Throws<InvalidOperationException>();
+        }
+
+        private class DummyClass
+        {
         }
     }
 }

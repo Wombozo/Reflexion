@@ -9,7 +9,7 @@ namespace Reflexion
     {
         public static object Create(string className, object[] props)
         {
-            var assembly = Assembly.GetExecutingAssembly();
+            var assembly = typeof(ModelObject).Assembly;
             var types = assembly.GetTypes();
             Type type;
             type = types.First(t => t.Name == className);
